@@ -4,10 +4,11 @@ A comprehensive loan tracking web application built with Next.js, React, and Typ
 
 ## Features
 
-### 🏦 User Management
-- Simple login/signup system
-- Each user can track multiple borrowers
-- Dashboard showing all active loans
+### 🎨 Premium Design
+- **Dark theme** with black background and gold accents
+- **Premium aesthetic** with gradient cards and glass effects
+- **Mobile-responsive** design
+- **Smooth animations** and transitions
 
 ### 💰 Loan Entry Interface
 - Quick transaction entry form
@@ -64,6 +65,16 @@ A comprehensive loan tracking web application built with Next.js, React, and Typ
 
 🚀 **Live Demo:** [https://lendx-starkags-projects.vercel.app](https://lendx-starkags-projects.vercel.app)
 
+## Design
+
+The application features a **premium dark theme** with:
+- **Black background** (#0a0a0a) for a sleek, modern look
+- **Gold accents** (#d4af37) for premium feel
+- **Gradient cards** with subtle gold borders
+- **Glass morphism** effects
+- **Smooth hover animations**
+- **Custom scrollbar** styling
+
 ## Getting Started
 
 ### Prerequisites
@@ -89,6 +100,8 @@ npm run dev
 ```
 
 4. Open [http://localhost:3000](http://localhost:3000) in your browser
+
+**Note:** No login required! The application works immediately with browser storage.
 
 ### Building for Production
 
