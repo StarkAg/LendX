@@ -20,7 +20,6 @@ export default function Dashboard() {
   }, []);
 
   const loadBorrowers = () => {
-    // Get all borrowers (no user filtering)
     const allBorrowers = storage.getAllBorrowers();
     setBorrowers(allBorrowers);
   };
@@ -36,22 +35,22 @@ export default function Dashboard() {
 
   return (
     <div className="min-h-screen bg-black">
-      {/* Header */}
-      <header className="bg-dark border-b border-gold/20 sticky top-0 z-50 backdrop-blur-sm bg-dark/80">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+      {/* Header - Minimal */}
+      <header className="border-b border-border sticky top-0 z-50 backdrop-blur-xl bg-black/60">
+        <div className="max-w-6xl mx-auto px-6 py-6">
           <div className="flex justify-between items-center">
             <div>
-              <h1 className="text-3xl font-bold text-gold mb-1 bg-gradient-to-r from-gold to-gold-light bg-clip-text text-transparent">
+              <h1 className="text-2xl font-light text-foreground tracking-tight">
                 LendX
               </h1>
-              <p className="text-sm text-gray-400">Premium Loan Tracking</p>
+              <p className="text-xs text-foreground/50 mt-1 font-light">Loan tracking</p>
             </div>
             <button
               onClick={() => {
                 setSelectedBorrower(null);
                 setShowTransactionForm(true);
               }}
-              className="btn-gold px-6 py-3 rounded-lg font-semibold text-sm uppercase tracking-wide"
+              className="btn-gold-subtle px-5 py-2.5 rounded-lg text-sm font-medium"
             >
               + Add Transaction
             </button>
@@ -59,42 +58,39 @@ export default function Dashboard() {
         </div>
       </header>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Summary Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          <div className="premium-card rounded-xl p-6">
-            <h3 className="text-sm font-medium text-gray-400 mb-2 uppercase tracking-wide">Total Borrowers</h3>
-            <p className="text-4xl font-bold text-gold">{borrowers.length}</p>
+      <div className="max-w-6xl mx-auto px-6 py-12">
+        {/* Summary Cards - Minimal */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-12">
+          <div className="card-minimal rounded-xl p-6">
+            <p className="text-xs text-foreground/50 mb-3 font-medium">Total Borrowers</p>
+            <p className="text-3xl font-light text-foreground">{borrowers.length}</p>
           </div>
-          <div className="premium-card rounded-xl p-6">
-            <h3 className="text-sm font-medium text-gray-400 mb-2 uppercase tracking-wide">Active Loans</h3>
-            <p className="text-4xl font-bold text-blue-400">{activeLoans.length}</p>
+          <div className="card-minimal rounded-xl p-6">
+            <p className="text-xs text-foreground/50 mb-3 font-medium">Active Loans</p>
+            <p className="text-3xl font-light text-foreground">{activeLoans.length}</p>
           </div>
-          <div className="premium-card rounded-xl p-6">
-            <h3 className="text-sm font-medium text-gray-400 mb-2 uppercase tracking-wide">Total Outstanding</h3>
-            <p className="text-4xl font-bold text-green-400">{formatCurrency(totalOutstanding)}</p>
+          <div className="card-minimal rounded-xl p-6">
+            <p className="text-xs text-foreground/50 mb-3 font-medium">Total Outstanding</p>
+            <p className="text-3xl font-light text-gold">{formatCurrency(totalOutstanding)}</p>
           </div>
         </div>
 
-        {/* Borrowers List */}
-        <div className="premium-card rounded-xl overflow-hidden">
-          <div className="px-6 py-5 border-b border-gold/20 bg-dark/50">
-            <h2 className="text-xl font-semibold text-gold uppercase tracking-wide">All Borrowers</h2>
-          </div>
-          <div className="divide-y divide-gold/10">
-            {borrowers.length === 0 ? (
-              <div className="px-6 py-16 text-center">
-                <div className="text-6xl mb-4">💎</div>
-                <p className="text-gray-400 mb-4 text-lg">No borrowers yet. Add your first transaction!</p>
-                <button
-                  onClick={() => setShowTransactionForm(true)}
-                  className="btn-gold px-6 py-3 rounded-lg font-semibold text-sm uppercase tracking-wide"
-                >
-                  Add Transaction
-                </button>
-              </div>
-            ) : (
-              borrowers.map((borrower) => {
+        {/* Borrowers List - Minimal */}
+        <div className="card-minimal rounded-xl overflow-hidden">
+          {borrowers.length === 0 ? (
+            <div className="px-8 py-20 text-center">
+              <div className="text-4xl mb-4 opacity-30">💎</div>
+              <p className="text-foreground/60 mb-6 text-sm">No borrowers yet</p>
+              <button
+                onClick={() => setShowTransactionForm(true)}
+                className="btn-gold-subtle px-5 py-2.5 rounded-lg text-sm font-medium"
+              >
+                Add Transaction
+              </button>
+            </div>
+          ) : (
+            <div className="divide-y divide-border">
+              {borrowers.map((borrower) => {
                 const balance = calculateRunningBalance(borrower.transactions);
                 return (
                   <Link
@@ -104,31 +100,28 @@ export default function Dashboard() {
                   >
                     <div className="flex justify-between items-center">
                       <div>
-                        <h3 className="text-lg font-semibold text-white group-hover:text-gold transition-colors">
+                        <h3 className="text-base font-medium text-foreground group-hover:text-gold transition-colors mb-1">
                           {borrower.name}
                         </h3>
-                        <p className="text-sm text-gray-400 mt-1">
-                          {borrower.transactions.length} transaction{borrower.transactions.length !== 1 ? "s" : ""} • {borrower.interestRate}% per week
+                        <p className="text-xs text-foreground/40">
+                          {borrower.transactions.length} transaction{borrower.transactions.length !== 1 ? "s" : ""} · {borrower.interestRate}% per week
                         </p>
                       </div>
                       <div className="text-right">
                         <p
-                          className={`text-2xl font-bold ${
-                            balance > 0 ? "text-green-400" : balance < 0 ? "text-red-400" : "text-gray-400"
+                          className={`text-lg font-light ${
+                            balance > 0 ? "text-foreground" : balance < 0 ? "text-foreground/60" : "text-foreground/40"
                           }`}
                         >
                           {formatCurrency(Math.abs(balance))}
-                        </p>
-                        <p className="text-xs text-gray-500 mt-1">
-                          {balance > 0 ? "Outstanding" : balance < 0 ? "Credit" : "Settled"}
                         </p>
                       </div>
                     </div>
                   </Link>
                 );
-              })
-            )}
-          </div>
+              })}
+            </div>
+          )}
         </div>
       </div>
 

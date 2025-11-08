@@ -37,11 +37,10 @@ export default function TransactionForm({ borrower, onClose }: TransactionFormPr
     let borrowerId = selectedBorrowerId;
     let targetBorrower: Borrower | null = null;
 
-    // Create new borrower if needed
     if (showNewBorrower && newBorrowerName.trim()) {
       const newBorrower: Borrower = {
         id: generateId(),
-        userId: "default", // No user authentication
+        userId: "default",
         name: newBorrowerName.trim(),
         interestRate: parseFloat(interestRate) || 10,
         interestMethod,
@@ -58,7 +57,6 @@ export default function TransactionForm({ borrower, onClose }: TransactionFormPr
         alert("Please select a borrower");
         return;
       }
-      // Update interest rate and method if changed
       if (targetBorrower.interestRate !== parseFloat(interestRate) || 
           targetBorrower.interestMethod !== interestMethod) {
         targetBorrower.interestRate = parseFloat(interestRate) || 10;
@@ -84,13 +82,13 @@ export default function TransactionForm({ borrower, onClose }: TransactionFormPr
   };
 
   return (
-    <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-      <div className="premium-card rounded-xl max-w-md w-full max-h-[90vh] overflow-y-auto border-gold/30">
-        <div className="px-6 py-5 border-b border-gold/20 flex justify-between items-center bg-dark/50">
-          <h2 className="text-xl font-semibold text-gold uppercase tracking-wide">Add Transaction</h2>
+    <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+      <div className="card-minimal rounded-2xl max-w-md w-full max-h-[90vh] overflow-y-auto border-border">
+        <div className="px-6 py-5 border-b border-border flex justify-between items-center">
+          <h2 className="text-lg font-medium text-foreground">Add Transaction</h2>
           <button
             onClick={onClose}
-            className="text-gray-400 hover:text-gold text-2xl transition-colors"
+            className="text-foreground/40 hover:text-foreground text-xl transition-colors"
           >
             ×
           </button>
@@ -99,7 +97,7 @@ export default function TransactionForm({ borrower, onClose }: TransactionFormPr
         <form onSubmit={handleSubmit} className="px-6 py-6 space-y-5">
           {/* Borrower Selection */}
           <div>
-            <label className="block text-sm font-medium text-gray-300 mb-2 uppercase tracking-wide">
+            <label className="block text-xs font-medium text-foreground/60 mb-2">
               Borrower
             </label>
             {!showNewBorrower ? (
@@ -107,7 +105,7 @@ export default function TransactionForm({ borrower, onClose }: TransactionFormPr
                 <select
                   value={selectedBorrowerId}
                   onChange={(e) => setSelectedBorrowerId(e.target.value)}
-                  className="w-full px-4 py-3 bg-dark border border-gold/20 rounded-lg focus:ring-2 focus:ring-gold focus:border-gold text-white"
+                  className="w-full px-4 py-2.5 bg-dark border border-border rounded-lg focus:ring-1 focus:ring-gold/30 focus:border-gold/30 text-foreground text-sm"
                   required
                 >
                   <option value="" className="bg-dark">Select borrower</option>
@@ -120,7 +118,7 @@ export default function TransactionForm({ borrower, onClose }: TransactionFormPr
                 <button
                   type="button"
                   onClick={() => setShowNewBorrower(true)}
-                  className="text-sm text-gold hover:text-gold-light transition-colors"
+                  className="text-xs text-gold hover:text-gold-light transition-colors"
                 >
                   + Add new borrower
                 </button>
@@ -132,7 +130,7 @@ export default function TransactionForm({ borrower, onClose }: TransactionFormPr
                   value={newBorrowerName}
                   onChange={(e) => setNewBorrowerName(e.target.value)}
                   placeholder="Enter borrower name"
-                  className="w-full px-4 py-3 bg-dark border border-gold/20 rounded-lg focus:ring-2 focus:ring-gold focus:border-gold text-white placeholder-gray-500"
+                  className="w-full px-4 py-2.5 bg-dark border border-border rounded-lg focus:ring-1 focus:ring-gold/30 focus:border-gold/30 text-foreground placeholder-foreground/30 text-sm"
                   required
                 />
                 <button
@@ -141,7 +139,7 @@ export default function TransactionForm({ borrower, onClose }: TransactionFormPr
                     setShowNewBorrower(false);
                     setNewBorrowerName("");
                   }}
-                  className="text-sm text-gray-400 hover:text-white transition-colors"
+                  className="text-xs text-foreground/40 hover:text-foreground transition-colors"
                 >
                   ← Use existing borrower
                 </button>
@@ -151,19 +149,19 @@ export default function TransactionForm({ borrower, onClose }: TransactionFormPr
 
           {/* Transaction Type */}
           <div>
-            <label className="block text-sm font-medium text-gray-300 mb-2 uppercase tracking-wide">
+            <label className="block text-xs font-medium text-foreground/60 mb-2">
               Transaction Type
             </label>
-            <div className="flex gap-4">
+            <div className="flex gap-3">
               <label className="flex items-center cursor-pointer">
                 <input
                   type="radio"
                   value="taken"
                   checked={transactionType === "taken"}
                   onChange={(e) => setTransactionType(e.target.value as "taken")}
-                  className="mr-2 w-4 h-4 text-gold focus:ring-gold bg-dark border-gold/30"
+                  className="mr-2 w-4 h-4 text-gold focus:ring-gold bg-dark border-border"
                 />
-                <span className="text-blue-400 font-medium">Taken</span>
+                <span className="text-sm text-foreground">Taken</span>
               </label>
               <label className="flex items-center cursor-pointer">
                 <input
@@ -171,16 +169,16 @@ export default function TransactionForm({ borrower, onClose }: TransactionFormPr
                   value="returned"
                   checked={transactionType === "returned"}
                   onChange={(e) => setTransactionType(e.target.value as "returned")}
-                  className="mr-2 w-4 h-4 text-gold focus:ring-gold bg-dark border-gold/30"
+                  className="mr-2 w-4 h-4 text-gold focus:ring-gold bg-dark border-border"
                 />
-                <span className="text-green-400 font-medium">Returned</span>
+                <span className="text-sm text-foreground">Returned</span>
               </label>
             </div>
           </div>
 
           {/* Amount */}
           <div>
-            <label className="block text-sm font-medium text-gray-300 mb-2 uppercase tracking-wide">
+            <label className="block text-xs font-medium text-foreground/60 mb-2">
               Amount (₹)
             </label>
             <input
@@ -190,21 +188,21 @@ export default function TransactionForm({ borrower, onClose }: TransactionFormPr
               placeholder="0"
               min="0"
               step="0.01"
-              className="w-full px-4 py-3 bg-dark border border-gold/20 rounded-lg focus:ring-2 focus:ring-gold focus:border-gold text-white placeholder-gray-500"
+              className="w-full px-4 py-2.5 bg-dark border border-border rounded-lg focus:ring-1 focus:ring-gold/30 focus:border-gold/30 text-foreground placeholder-foreground/30 text-sm"
               required
             />
           </div>
 
           {/* Date */}
           <div>
-            <label className="block text-sm font-medium text-gray-300 mb-2 uppercase tracking-wide">
+            <label className="block text-xs font-medium text-foreground/60 mb-2">
               Date
             </label>
             <input
               type="date"
               value={date}
               onChange={(e) => setDate(e.target.value)}
-              className="w-full px-4 py-3 bg-dark border border-gold/20 rounded-lg focus:ring-2 focus:ring-gold focus:border-gold text-white"
+              className="w-full px-4 py-2.5 bg-dark border border-border rounded-lg focus:ring-1 focus:ring-gold/30 focus:border-gold/30 text-foreground text-sm"
               required
             />
           </div>
@@ -212,7 +210,7 @@ export default function TransactionForm({ borrower, onClose }: TransactionFormPr
           {/* Interest Rate */}
           {(showNewBorrower || !borrower) && (
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2 uppercase tracking-wide">
+              <label className="block text-xs font-medium text-foreground/60 mb-2">
                 Interest Rate (% per week)
               </label>
               <input
@@ -222,7 +220,7 @@ export default function TransactionForm({ borrower, onClose }: TransactionFormPr
                 placeholder="10"
                 min="0"
                 step="0.1"
-                className="w-full px-4 py-3 bg-dark border border-gold/20 rounded-lg focus:ring-2 focus:ring-gold focus:border-gold text-white placeholder-gray-500"
+                className="w-full px-4 py-2.5 bg-dark border border-border rounded-lg focus:ring-1 focus:ring-gold/30 focus:border-gold/30 text-foreground placeholder-foreground/30 text-sm"
               />
             </div>
           )}
@@ -230,7 +228,7 @@ export default function TransactionForm({ borrower, onClose }: TransactionFormPr
           {/* Interest Method */}
           {(showNewBorrower || !borrower) && (
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2 uppercase tracking-wide">
+              <label className="block text-xs font-medium text-foreground/60 mb-2">
                 Interest Calculation Method
               </label>
               <select
@@ -238,7 +236,7 @@ export default function TransactionForm({ borrower, onClose }: TransactionFormPr
                 onChange={(e) =>
                   setInterestMethod(e.target.value as "simple" | "simple_with_repay" | "compound")
                 }
-                className="w-full px-4 py-3 bg-dark border border-gold/20 rounded-lg focus:ring-2 focus:ring-gold focus:border-gold text-white"
+                className="w-full px-4 py-2.5 bg-dark border border-border rounded-lg focus:ring-1 focus:ring-gold/30 focus:border-gold/30 text-foreground text-sm"
               >
                 <option value="simple" className="bg-dark">Simple Interest (no repayment consideration)</option>
                 <option value="simple_with_repay" className="bg-dark">Simple Interest (with repayment consideration)</option>
@@ -251,13 +249,13 @@ export default function TransactionForm({ borrower, onClose }: TransactionFormPr
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 px-4 py-3 border border-gold/30 text-gray-300 rounded-lg hover:bg-dark hover:border-gold/50 transition-colors"
+              className="flex-1 px-4 py-2.5 border border-border text-foreground/60 rounded-lg hover:bg-dark hover:text-foreground transition-colors text-sm"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="flex-1 btn-gold px-4 py-3 rounded-lg font-semibold uppercase tracking-wide"
+              className="flex-1 btn-gold-subtle px-4 py-2.5 rounded-lg text-sm font-medium"
             >
               Add Transaction
             </button>
