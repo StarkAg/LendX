@@ -36,7 +36,7 @@ export default function TransactionForm({ user, borrower, onClose }: Transaction
     e.preventDefault();
 
     let borrowerId = selectedBorrowerId;
-    let targetBorrower: Borrower;
+    let targetBorrower: Borrower | null = null;
 
     // Create new borrower if needed
     if (showNewBorrower && newBorrowerName.trim()) {
@@ -54,7 +54,7 @@ export default function TransactionForm({ user, borrower, onClose }: Transaction
       borrowerId = newBorrower.id;
       targetBorrower = newBorrower;
     } else {
-      targetBorrower = borrowers.find((b) => b.id === borrowerId);
+      targetBorrower = borrowers.find((b) => b.id === borrowerId) || null;
       if (!targetBorrower) {
         alert("Please select a borrower");
         return;
@@ -66,6 +66,11 @@ export default function TransactionForm({ user, borrower, onClose }: Transaction
         targetBorrower.interestMethod = interestMethod;
         storage.saveBorrower(targetBorrower);
       }
+    }
+
+    if (!targetBorrower) {
+      alert("Please select or create a borrower");
+      return;
     }
 
     const transaction: Transaction = {
