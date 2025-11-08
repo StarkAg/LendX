@@ -6,50 +6,23 @@ const STORAGE_KEYS = {
   CURRENT_USER: "lendx_current_user",
 };
 
+const DEFAULT_USER_ID = "default_user";
+
 export const storage = {
-  // User management
-  getUsers(): User[] {
-    if (typeof window === "undefined") return [];
-    const data = localStorage.getItem(STORAGE_KEYS.USERS);
-    return data ? JSON.parse(data) : [];
-  },
-
-  saveUsers(users: User[]): void {
-    if (typeof window === "undefined") return;
-    localStorage.setItem(STORAGE_KEYS.USERS, JSON.stringify(users));
-  },
-
-  getCurrentUser(): User | null {
-    if (typeof window === "undefined") return null;
-    const data = localStorage.getItem(STORAGE_KEYS.CURRENT_USER);
-    return data ? JSON.parse(data) : null;
-  },
-
-  setCurrentUser(user: User | null): void {
-    if (typeof window === "undefined") return;
-    if (user) {
-      localStorage.setItem(STORAGE_KEYS.CURRENT_USER, JSON.stringify(user));
-    } else {
-      localStorage.removeItem(STORAGE_KEYS.CURRENT_USER);
-    }
-  },
-
-  // Borrower management
-  getBorrowers(userId: string): Borrower[] {
-    if (typeof window === "undefined") return [];
-    const allBorrowers = this.getAllBorrowers();
-    return allBorrowers.filter((b) => b.userId === userId);
-  },
-
-  getAllBorrowers(): Borrower[] {
+  // Borrower management (no user filtering needed)
+  getBorrowers(): Borrower[] {
     if (typeof window === "undefined") return [];
     const data = localStorage.getItem(STORAGE_KEYS.BORROWERS);
     return data ? JSON.parse(data) : [];
   },
 
+  getAllBorrowers(): Borrower[] {
+    return this.getBorrowers();
+  },
+
   saveBorrower(borrower: Borrower): void {
     if (typeof window === "undefined") return;
-    const borrowers = this.getAllBorrowers();
+    const borrowers = this.getBorrowers();
     const index = borrowers.findIndex((b) => b.id === borrower.id);
     if (index >= 0) {
       borrowers[index] = borrower;
@@ -61,7 +34,7 @@ export const storage = {
 
   deleteBorrower(borrowerId: string): void {
     if (typeof window === "undefined") return;
-    const borrowers = this.getAllBorrowers();
+    const borrowers = this.getBorrowers();
     const filtered = borrowers.filter((b) => b.id !== borrowerId);
     localStorage.setItem(STORAGE_KEYS.BORROWERS, JSON.stringify(filtered));
   },
@@ -69,7 +42,7 @@ export const storage = {
   // Transaction management
   addTransaction(borrowerId: string, transaction: Transaction): void {
     if (typeof window === "undefined") return;
-    const borrowers = this.getAllBorrowers();
+    const borrowers = this.getBorrowers();
     const borrower = borrowers.find((b) => b.id === borrowerId);
     if (borrower) {
       borrower.transactions.push(transaction);
@@ -83,7 +56,7 @@ export const storage = {
 
   updateTransaction(borrowerId: string, transactionId: string, updates: Partial<Transaction>): void {
     if (typeof window === "undefined") return;
-    const borrowers = this.getAllBorrowers();
+    const borrowers = this.getBorrowers();
     const borrower = borrowers.find((b) => b.id === borrowerId);
     if (borrower) {
       const transaction = borrower.transactions.find((t) => t.id === transactionId);
@@ -100,7 +73,7 @@ export const storage = {
 
   deleteTransaction(borrowerId: string, transactionId: string): void {
     if (typeof window === "undefined") return;
-    const borrowers = this.getAllBorrowers();
+    const borrowers = this.getBorrowers();
     const borrower = borrowers.find((b) => b.id === borrowerId);
     if (borrower) {
       borrower.transactions = borrower.transactions.filter((t) => t.id !== transactionId);
@@ -109,4 +82,3 @@ export const storage = {
     }
   },
 };
-

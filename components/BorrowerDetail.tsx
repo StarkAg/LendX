@@ -11,17 +11,16 @@ import {
   getDailyInterestRate,
 } from "@/lib/calculations";
 import { formatCurrency, formatDate, generateId } from "@/lib/utils";
-import { User, Borrower, Transaction, BorrowerSummary } from "@/types";
+import { Borrower, Transaction, BorrowerSummary } from "@/types";
 import TransactionForm from "./TransactionForm";
 import InterestComparison from "./InterestComparison";
 import { parseISO } from "date-fns";
 
 interface BorrowerDetailProps {
-  user: User;
   borrowerId: string;
 }
 
-export default function BorrowerDetail({ user, borrowerId }: BorrowerDetailProps) {
+export default function BorrowerDetail({ borrowerId }: BorrowerDetailProps) {
   const router = useRouter();
   const [borrower, setBorrower] = useState<Borrower | null>(null);
   const [showTransactionForm, setShowTransactionForm] = useState(false);
@@ -42,12 +41,12 @@ export default function BorrowerDetail({ user, borrowerId }: BorrowerDetailProps
   }, [borrower, asOfDate]);
 
   const loadBorrower = () => {
-    const borrowers = storage.getBorrowers(user.id);
+    const borrowers = storage.getAllBorrowers();
     const found = borrowers.find((b) => b.id === borrowerId);
     if (found) {
       setBorrower(found);
     } else {
-      router.push("/dashboard");
+      router.push("/");
     }
   };
 
@@ -113,16 +112,10 @@ export default function BorrowerDetail({ user, borrowerId }: BorrowerDetailProps
     setShowEditTransaction(null);
   };
 
-  if (!borrower || !summary) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-gray-500">Loading...</div>
-      </div>
-    );
-  }
-
   // Calculate running balances for all transactions
   const transactionsWithBalance = useMemo(() => {
+    if (!borrower) return [];
+    
     const allTransactions = [...borrower.transactions].sort(
       (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
     );
@@ -158,26 +151,36 @@ export default function BorrowerDetail({ user, borrowerId }: BorrowerDetailProps
         runningBalance,
       };
     });
-  }, [borrower.transactions, startDate, endDate]);
+  }, [borrower, startDate, endDate]);
+
+  if (!borrower || !summary) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-black">
+        <div className="text-gold">Loading...</div>
+      </div>
+    );
+  }
 
   const filteredTransactions = filterTransactionsByDate(borrower.transactions);
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-black">
       {/* Header */}
-      <header className="bg-white shadow-sm border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+      <header className="bg-dark border-b border-gold/20 sticky top-0 z-50 backdrop-blur-sm bg-dark/80">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex justify-between items-center">
             <div className="flex items-center gap-4">
               <button
-                onClick={() => router.push("/dashboard")}
-                className="text-gray-600 hover:text-gray-900"
+                onClick={() => router.push("/")}
+                className="text-gray-400 hover:text-gold transition-colors"
               >
                 ← Back
               </button>
               <div>
-                <h1 className="text-2xl font-bold text-gray-800">{borrower.name}</h1>
-                <p className="text-sm text-gray-600">
+                <h1 className="text-3xl font-bold text-gold bg-gradient-to-r from-gold to-gold-light bg-clip-text text-transparent">
+                  {borrower.name}
+                </h1>
+                <p className="text-sm text-gray-400">
                   Interest Rate: {borrower.interestRate}% per week
                 </p>
               </div>
@@ -186,7 +189,7 @@ export default function BorrowerDetail({ user, borrowerId }: BorrowerDetailProps
               onClick={() => {
                 setShowTransactionForm(true);
               }}
-              className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
+              className="btn-gold px-6 py-3 rounded-lg font-semibold text-sm uppercase tracking-wide"
             >
               + Add Transaction
             </button>
@@ -197,60 +200,60 @@ export default function BorrowerDetail({ user, borrowerId }: BorrowerDetailProps
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Summary Cards */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-          <div className="bg-white rounded-lg shadow p-4">
-            <h3 className="text-sm font-medium text-gray-600 mb-1">Total Taken</h3>
-            <p className="text-2xl font-bold text-blue-600">{formatCurrency(summary.totalTaken)}</p>
+          <div className="premium-card rounded-xl p-5">
+            <h3 className="text-xs font-medium text-gray-400 mb-2 uppercase tracking-wide">Total Taken</h3>
+            <p className="text-2xl font-bold text-blue-400">{formatCurrency(summary.totalTaken)}</p>
           </div>
-          <div className="bg-white rounded-lg shadow p-4">
-            <h3 className="text-sm font-medium text-gray-600 mb-1">Total Returned</h3>
-            <p className="text-2xl font-bold text-green-600">
+          <div className="premium-card rounded-xl p-5">
+            <h3 className="text-xs font-medium text-gray-400 mb-2 uppercase tracking-wide">Total Returned</h3>
+            <p className="text-2xl font-bold text-green-400">
               {formatCurrency(summary.totalReturned)}
             </p>
           </div>
-          <div className="bg-white rounded-lg shadow p-4">
-            <h3 className="text-sm font-medium text-gray-600 mb-1">Current Balance</h3>
-            <p className="text-2xl font-bold text-gray-900">
+          <div className="premium-card rounded-xl p-5">
+            <h3 className="text-xs font-medium text-gray-400 mb-2 uppercase tracking-wide">Current Balance</h3>
+            <p className="text-2xl font-bold text-gold">
               {formatCurrency(Math.abs(summary.currentBalance))}
             </p>
           </div>
-          <div className="bg-white rounded-lg shadow p-4">
-            <h3 className="text-sm font-medium text-gray-600 mb-1">Daily Interest Rate</h3>
-            <p className="text-2xl font-bold text-purple-600">
+          <div className="premium-card rounded-xl p-5">
+            <h3 className="text-xs font-medium text-gray-400 mb-2 uppercase tracking-wide">Daily Interest Rate</h3>
+            <p className="text-2xl font-bold text-purple-400">
               {summary.dailyInterestRate.toFixed(4)}%
             </p>
           </div>
         </div>
 
         {/* Date Filters and As Of Date */}
-        <div className="bg-white rounded-lg shadow p-4 mb-6">
+        <div className="premium-card rounded-xl p-5 mb-6">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Start Date</label>
+              <label className="block text-xs font-medium text-gray-400 mb-2 uppercase tracking-wide">Start Date</label>
               <input
                 type="date"
                 value={startDate}
                 onChange={(e) => setStartDate(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"
+                className="w-full px-3 py-2 bg-dark border border-gold/20 rounded-lg text-sm text-white"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">End Date</label>
+              <label className="block text-xs font-medium text-gray-400 mb-2 uppercase tracking-wide">End Date</label>
               <input
                 type="date"
                 value={endDate}
                 onChange={(e) => setEndDate(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"
+                className="w-full px-3 py-2 bg-dark border border-gold/20 rounded-lg text-sm text-white"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-xs font-medium text-gray-400 mb-2 uppercase tracking-wide">
                 Calculate Interest As Of
               </label>
               <input
                 type="date"
                 value={asOfDate}
                 onChange={(e) => setAsOfDate(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"
+                className="w-full px-3 py-2 bg-dark border border-gold/20 rounded-lg text-sm text-white"
               />
             </div>
             <div className="flex items-end">
@@ -260,7 +263,7 @@ export default function BorrowerDetail({ user, borrowerId }: BorrowerDetailProps
                   setEndDate("");
                   setAsOfDate(new Date().toISOString().split("T")[0]);
                 }}
-                className="w-full px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 text-sm"
+                className="w-full px-4 py-2 bg-dark border border-gold/30 text-gray-300 rounded-lg hover:bg-dark hover:border-gold/50 transition-colors text-sm"
               >
                 Reset Filters
               </button>
@@ -272,76 +275,76 @@ export default function BorrowerDetail({ user, borrowerId }: BorrowerDetailProps
         <InterestComparison calculations={summary.interestCalculations} />
 
         {/* Transaction History */}
-        <div className="bg-white rounded-lg shadow overflow-hidden mt-6">
-          <div className="px-6 py-4 border-b border-gray-200">
-            <h2 className="text-lg font-semibold text-gray-800">Transaction History</h2>
+        <div className="premium-card rounded-xl overflow-hidden mt-6">
+          <div className="px-6 py-5 border-b border-gold/20 bg-dark/50">
+            <h2 className="text-xl font-semibold text-gold uppercase tracking-wide">Transaction History</h2>
           </div>
           <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-gray-200">
-              <thead className="bg-gray-50">
+            <table className="min-w-full divide-y divide-gold/10">
+              <thead className="bg-dark/50">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
                     Date
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
                     Taken
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
                     Returned
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
                     Running Balance
                   </th>
-                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-400 uppercase tracking-wider">
                     Actions
                   </th>
                 </tr>
               </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
-                {filteredTransactions.length === 0 ? (
+              <tbody className="bg-dark/30 divide-y divide-gold/10">
+                {transactionsWithBalance.length === 0 ? (
                   <tr>
-                    <td colSpan={5} className="px-6 py-8 text-center text-gray-500">
+                    <td colSpan={5} className="px-6 py-12 text-center text-gray-400">
                       No transactions found
                     </td>
                   </tr>
                 ) : (
                   transactionsWithBalance.map((transaction) => {
                     return (
-                      <tr key={transaction.id} className="hover:bg-gray-50">
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                      <tr key={transaction.id} className="hover:bg-dark/50 transition-colors">
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-white">
                           {formatDate(transaction.date)}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm">
                           {transaction.type === "taken" ? (
-                            <span className="text-blue-600 font-medium">
+                            <span className="text-blue-400 font-medium">
                               {formatCurrency(transaction.amount)}
                             </span>
                           ) : (
-                            <span className="text-gray-400">-</span>
+                            <span className="text-gray-600">-</span>
                           )}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm">
                           {transaction.type === "returned" ? (
-                            <span className="text-green-600 font-medium">
+                            <span className="text-green-400 font-medium">
                               {formatCurrency(transaction.amount)}
                             </span>
                           ) : (
-                            <span className="text-gray-400">-</span>
+                            <span className="text-gray-600">-</span>
                           )}
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gold">
                           {formatCurrency(Math.abs(transaction.runningBalance))}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                           <button
                             onClick={() => setShowEditTransaction(transaction)}
-                            className="text-blue-600 hover:text-blue-900 mr-4"
+                            className="text-blue-400 hover:text-blue-300 mr-4 transition-colors"
                           >
                             Edit
                           </button>
                           <button
                             onClick={() => handleDeleteTransaction(transaction.id)}
-                            className="text-red-600 hover:text-red-900"
+                            className="text-red-400 hover:text-red-300 transition-colors"
                           >
                             Delete
                           </button>
@@ -361,7 +364,7 @@ export default function BorrowerDetail({ user, borrowerId }: BorrowerDetailProps
             onClick={async () => {
               await exportToExcel(borrower, filteredTransactions, summary);
             }}
-            className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
+            className="px-4 py-2 bg-green-600/20 border border-green-500/50 text-green-400 rounded-lg hover:bg-green-600/30 transition-colors"
           >
             Export to Excel
           </button>
@@ -369,7 +372,7 @@ export default function BorrowerDetail({ user, borrowerId }: BorrowerDetailProps
             onClick={async () => {
               await exportToPDF(borrower, filteredTransactions, summary);
             }}
-            className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
+            className="px-4 py-2 bg-red-600/20 border border-red-500/50 text-red-400 rounded-lg hover:bg-red-600/30 transition-colors"
           >
             Export to PDF
           </button>
@@ -379,7 +382,6 @@ export default function BorrowerDetail({ user, borrowerId }: BorrowerDetailProps
       {/* Transaction Form Modal */}
       {showTransactionForm && (
         <TransactionForm
-          user={user}
           borrower={borrower}
           onClose={() => {
             setShowTransactionForm(false);
@@ -423,64 +425,64 @@ function EditTransactionModal({
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-      <div className="bg-white rounded-lg shadow-xl max-w-md w-full">
-        <div className="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
-          <h2 className="text-xl font-semibold text-gray-800">Edit Transaction</h2>
-          <button onClick={onClose} className="text-gray-400 hover:text-gray-600 text-2xl">
+    <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+      <div className="premium-card rounded-xl max-w-md w-full border-gold/30">
+        <div className="px-6 py-5 border-b border-gold/20 flex justify-between items-center bg-dark/50">
+          <h2 className="text-xl font-semibold text-gold uppercase tracking-wide">Edit Transaction</h2>
+          <button onClick={onClose} className="text-gray-400 hover:text-gold text-2xl transition-colors">
             ×
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="px-6 py-4 space-y-4">
+        <form onSubmit={handleSubmit} className="px-6 py-6 space-y-5">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-gray-300 mb-2 uppercase tracking-wide">
               Transaction Type
             </label>
             <div className="flex gap-4">
-              <label className="flex items-center">
+              <label className="flex items-center cursor-pointer">
                 <input
                   type="radio"
                   value="taken"
                   checked={type === "taken"}
                   onChange={(e) => setType(e.target.value as "taken")}
-                  className="mr-2"
+                  className="mr-2 w-4 h-4 text-gold focus:ring-gold bg-dark border-gold/30"
                 />
-                <span className="text-blue-600 font-medium">Taken</span>
+                <span className="text-blue-400 font-medium">Taken</span>
               </label>
-              <label className="flex items-center">
+              <label className="flex items-center cursor-pointer">
                 <input
                   type="radio"
                   value="returned"
                   checked={type === "returned"}
                   onChange={(e) => setType(e.target.value as "returned")}
-                  className="mr-2"
+                  className="mr-2 w-4 h-4 text-gold focus:ring-gold bg-dark border-gold/30"
                 />
-                <span className="text-green-600 font-medium">Returned</span>
+                <span className="text-green-400 font-medium">Returned</span>
               </label>
             </div>
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Amount (₹)</label>
+            <label className="block text-sm font-medium text-gray-300 mb-2 uppercase tracking-wide">Amount (₹)</label>
             <input
               type="number"
               value={amount}
               onChange={(e) => setAmount(e.target.value)}
               min="0"
               step="0.01"
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+              className="w-full px-4 py-3 bg-dark border border-gold/20 rounded-lg focus:ring-2 focus:ring-gold text-white"
               required
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Date</label>
+            <label className="block text-sm font-medium text-gray-300 mb-2 uppercase tracking-wide">Date</label>
             <input
               type="date"
               value={date}
               onChange={(e) => setDate(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+              className="w-full px-4 py-3 bg-dark border border-gold/20 rounded-lg focus:ring-2 focus:ring-gold text-white"
               required
             />
           </div>
@@ -489,13 +491,13 @@ function EditTransactionModal({
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50"
+              className="flex-1 px-4 py-2 border border-gold/30 text-gray-300 rounded-lg hover:bg-dark hover:border-gold/50 transition-colors"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+              className="flex-1 btn-gold px-4 py-2 rounded-lg font-semibold uppercase tracking-wide"
             >
               Save Changes
             </button>
@@ -661,4 +663,3 @@ async function exportToPDF(
     alert("Failed to export to PDF. Please try again.");
   }
 }
-
