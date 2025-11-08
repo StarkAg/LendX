@@ -58,9 +58,11 @@ A comprehensive loan tracking web application built with Next.js, React, and Typ
 - **Export:** xlsx (Excel), jsPDF (PDF)
 - **Storage:** localStorage (can be upgraded to backend)
 
-## Repository
+## Repository & Deployment
 
 🌐 **GitHub:** [https://github.com/StarkAg/LendX](https://github.com/StarkAg/LendX)
+
+🚀 **Live Demo:** [https://lendx-starkags-projects.vercel.app](https://lendx-starkags-projects.vercel.app)
 
 ## Getting Started
 
