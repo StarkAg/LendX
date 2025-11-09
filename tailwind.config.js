@@ -8,19 +8,33 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        background: '#0a0a0a',
-        foreground: '#e5e5e5',
-        gold: {
-          DEFAULT: '#c9a961',
-          light: '#d4af6f',
-          dark: '#a8904f',
+        background: '#081B1B',
+        foreground: '#EEE8B2',
+        brown: {
+          DEFAULT: '#C18D52',
+          light: '#D4A574',
+          dark: '#A67A42',
         },
-        dark: {
-          DEFAULT: '#141414',
-          medium: '#1a1a1a',
-          light: '#242424',
+        teal: {
+          DEFAULT: '#081B1B',
+          light: '#0A2525',
         },
-        border: 'rgba(255, 255, 255, 0.06)',
+        forest: {
+          DEFAULT: '#203B37',
+          light: '#2A4A45',
+          dark: '#1A2F2B',
+        },
+        sage: {
+          DEFAULT: '#5A8F76',
+          light: '#6BA085',
+          dark: '#4A7A63',
+        },
+        mint: {
+          DEFAULT: '#96CDB0',
+          light: '#A8D8C0',
+          dark: '#84BFA0',
+        },
+        border: 'rgba(150, 205, 176, 0.1)',
       },
       spacing: {
         '18': '4.5rem',
