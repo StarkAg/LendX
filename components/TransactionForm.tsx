@@ -82,7 +82,7 @@ export default function TransactionForm({ borrower, onClose }: TransactionFormPr
   };
 
   return (
-    <div className="fixed inset-0 bg-teal/80 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+    <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4 z-50">
       <div className="card-minimal rounded-2xl max-w-md w-full max-h-[90vh] overflow-y-auto border-border">
         <div className="px-6 py-5 border-b border-border flex justify-between items-center">
           <h2 className="text-lg font-medium text-foreground">Add Transaction</h2>
@@ -105,12 +105,12 @@ export default function TransactionForm({ borrower, onClose }: TransactionFormPr
                 <select
                   value={selectedBorrowerId}
                   onChange={(e) => setSelectedBorrowerId(e.target.value)}
-                  className="w-full px-4 py-2.5 bg-forest border border-border rounded-lg focus:ring-1 focus:ring-sage/30 focus:border-sage/30 text-foreground text-sm"
+                  className="w-full px-4 py-2.5 bg-dark border border-border rounded-lg focus:ring-1 focus:ring-gold/30 focus:border-gold/30 text-foreground text-sm"
                   required
                 >
-                  <option value="" className="bg-forest">Select borrower</option>
+                  <option value="" className="bg-dark">Select borrower</option>
                   {borrowers.map((b) => (
-                    <option key={b.id} value={b.id} className="bg-forest">
+                    <option key={b.id} value={b.id} className="bg-dark">
                       {b.name}
                     </option>
                   ))}
@@ -118,7 +118,7 @@ export default function TransactionForm({ borrower, onClose }: TransactionFormPr
                 <button
                   type="button"
                   onClick={() => setShowNewBorrower(true)}
-                  className="text-xs text-sage hover:text-mint transition-colors"
+                  className="text-xs text-gold hover:text-gold-light transition-colors"
                 >
                   + Add new borrower
                 </button>
@@ -130,7 +130,7 @@ export default function TransactionForm({ borrower, onClose }: TransactionFormPr
                   value={newBorrowerName}
                   onChange={(e) => setNewBorrowerName(e.target.value)}
                   placeholder="Enter borrower name"
-                  className="w-full px-4 py-2.5 bg-forest border border-border rounded-lg focus:ring-1 focus:ring-sage/30 focus:border-sage/30 text-foreground placeholder-foreground/30 text-sm"
+                  className="w-full px-4 py-2.5 bg-dark border border-border rounded-lg focus:ring-1 focus:ring-gold/30 focus:border-gold/30 text-foreground placeholder-foreground/30 text-sm"
                   required
                 />
                 <button
@@ -159,7 +159,7 @@ export default function TransactionForm({ borrower, onClose }: TransactionFormPr
                   value="taken"
                   checked={transactionType === "taken"}
                   onChange={(e) => setTransactionType(e.target.value as "taken")}
-                  className="mr-2 w-4 h-4 text-sage focus:ring-sage bg-forest border-border"
+                  className="mr-2 w-4 h-4 text-gold focus:ring-gold bg-dark border-border"
                 />
                 <span className="text-sm text-foreground">Taken</span>
               </label>
@@ -169,7 +169,7 @@ export default function TransactionForm({ borrower, onClose }: TransactionFormPr
                   value="returned"
                   checked={transactionType === "returned"}
                   onChange={(e) => setTransactionType(e.target.value as "returned")}
-                  className="mr-2 w-4 h-4 text-sage focus:ring-sage bg-forest border-border"
+                  className="mr-2 w-4 h-4 text-gold focus:ring-gold bg-dark border-border"
                 />
                 <span className="text-sm text-foreground">Returned</span>
               </label>
@@ -188,7 +188,7 @@ export default function TransactionForm({ borrower, onClose }: TransactionFormPr
               placeholder="0"
               min="0"
               step="0.01"
-              className="w-full px-4 py-2.5 bg-forest border border-border rounded-lg focus:ring-1 focus:ring-sage/30 focus:border-sage/30 text-foreground placeholder-foreground/30 text-sm"
+              className="w-full px-4 py-2.5 bg-dark border border-border rounded-lg focus:ring-1 focus:ring-gold/30 focus:border-gold/30 text-foreground placeholder-foreground/30 text-sm"
               required
             />
           </div>
@@ -202,7 +202,7 @@ export default function TransactionForm({ borrower, onClose }: TransactionFormPr
               type="date"
               value={date}
               onChange={(e) => setDate(e.target.value)}
-              className="w-full px-4 py-2.5 bg-forest border border-border rounded-lg focus:ring-1 focus:ring-sage/30 focus:border-sage/30 text-foreground text-sm"
+              className="w-full px-4 py-2.5 bg-dark border border-border rounded-lg focus:ring-1 focus:ring-gold/30 focus:border-gold/30 text-foreground text-sm"
               required
             />
           </div>
@@ -220,7 +220,7 @@ export default function TransactionForm({ borrower, onClose }: TransactionFormPr
                 placeholder="10"
                 min="0"
                 step="0.1"
-                className="w-full px-4 py-2.5 bg-forest border border-border rounded-lg focus:ring-1 focus:ring-sage/30 focus:border-sage/30 text-foreground placeholder-foreground/30 text-sm"
+                className="w-full px-4 py-2.5 bg-dark border border-border rounded-lg focus:ring-1 focus:ring-gold/30 focus:border-gold/30 text-foreground placeholder-foreground/30 text-sm"
               />
             </div>
           )}
@@ -236,11 +236,11 @@ export default function TransactionForm({ borrower, onClose }: TransactionFormPr
                 onChange={(e) =>
                   setInterestMethod(e.target.value as "simple" | "simple_with_repay" | "compound")
                 }
-                className="w-full px-4 py-2.5 bg-forest border border-border rounded-lg focus:ring-1 focus:ring-sage/30 focus:border-sage/30 text-foreground text-sm"
+                className="w-full px-4 py-2.5 bg-dark border border-border rounded-lg focus:ring-1 focus:ring-gold/30 focus:border-gold/30 text-foreground text-sm"
               >
-                <option value="simple" className="bg-forest">Simple Interest (no repayment consideration)</option>
-                <option value="simple_with_repay" className="bg-forest">Simple Interest (with repayment consideration)</option>
-                <option value="compound" className="bg-forest">Compound Interest (weekly compounding)</option>
+                <option value="simple" className="bg-dark">Simple Interest (no repayment consideration)</option>
+                <option value="simple_with_repay" className="bg-dark">Simple Interest (with repayment consideration)</option>
+                <option value="compound" className="bg-dark">Compound Interest (weekly compounding)</option>
               </select>
             </div>
           )}
@@ -249,13 +249,13 @@ export default function TransactionForm({ borrower, onClose }: TransactionFormPr
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 px-4 py-2.5 border border-border text-foreground/60 rounded-lg hover:bg-forest hover:text-foreground transition-colors text-sm"
+              className="flex-1 px-4 py-2.5 border border-border text-foreground/60 rounded-lg hover:bg-dark hover:text-foreground transition-colors text-sm"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="flex-1 btn-brown px-4 py-2.5 rounded-lg text-sm font-medium"
+              className="flex-1 btn-gold-subtle px-4 py-2.5 rounded-lg text-sm font-medium"
             >
               Add Transaction
             </button>

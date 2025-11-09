@@ -34,9 +34,9 @@ export default function Dashboard() {
   );
 
   return (
-    <div className="min-h-screen bg-teal">
+    <div className="min-h-screen bg-black">
       {/* Header - Minimal */}
-      <header className="border-b border-border sticky top-0 z-50 backdrop-blur-xl bg-teal/80">
+      <header className="border-b border-border sticky top-0 z-50 backdrop-blur-xl bg-black/60">
         <div className="max-w-6xl mx-auto px-6 py-6">
           <div className="flex justify-between items-center">
             <div>
@@ -50,7 +50,7 @@ export default function Dashboard() {
                 setSelectedBorrower(null);
                 setShowTransactionForm(true);
               }}
-              className="btn-brown px-5 py-2.5 rounded-lg text-sm font-medium"
+              className="btn-gold-subtle px-5 py-2.5 rounded-lg text-sm font-medium"
             >
               + Add Transaction
             </button>
@@ -67,11 +67,11 @@ export default function Dashboard() {
           </div>
           <div className="card-minimal rounded-xl p-6">
             <p className="text-xs text-foreground/50 mb-3 font-medium">Active Loans</p>
-            <p className="text-3xl font-light text-sage">{activeLoans.length}</p>
+            <p className="text-3xl font-light text-foreground">{activeLoans.length}</p>
           </div>
           <div className="card-minimal rounded-xl p-6">
             <p className="text-xs text-foreground/50 mb-3 font-medium">Total Outstanding</p>
-            <p className="text-3xl font-light text-mint">{formatCurrency(totalOutstanding)}</p>
+            <p className="text-3xl font-light text-gold">{formatCurrency(totalOutstanding)}</p>
           </div>
         </div>
 
@@ -83,7 +83,7 @@ export default function Dashboard() {
               <p className="text-foreground/60 mb-6 text-sm">No borrowers yet</p>
               <button
                 onClick={() => setShowTransactionForm(true)}
-                className="btn-brown px-5 py-2.5 rounded-lg text-sm font-medium"
+                className="btn-gold-subtle px-5 py-2.5 rounded-lg text-sm font-medium"
               >
                 Add Transaction
               </button>
@@ -96,11 +96,11 @@ export default function Dashboard() {
                   <Link
                     key={borrower.id}
                     href={`/borrower/${borrower.id}`}
-                    className="block px-6 py-5 hover:bg-forest/50 transition-colors group"
+                    className="block px-6 py-5 hover:bg-dark/50 transition-colors group"
                   >
                     <div className="flex justify-between items-center">
                       <div>
-                        <h3 className="text-base font-medium text-foreground group-hover:text-mint transition-colors mb-1">
+                        <h3 className="text-base font-medium text-foreground group-hover:text-gold transition-colors mb-1">
                           {borrower.name}
                         </h3>
                         <p className="text-xs text-foreground/40">
@@ -110,7 +110,7 @@ export default function Dashboard() {
                       <div className="text-right">
                         <p
                           className={`text-lg font-light ${
-                            balance > 0 ? "text-mint" : balance < 0 ? "text-foreground/60" : "text-foreground/40"
+                            balance > 0 ? "text-foreground" : balance < 0 ? "text-foreground/60" : "text-foreground/40"
                           }`}
                         >
                           {formatCurrency(Math.abs(balance))}

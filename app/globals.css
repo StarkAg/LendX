@@ -3,14 +3,16 @@
 @tailwind utilities;
 
 :root {
-  --background: #081B1B;
-  --foreground: #EEE8B2;
-  --accent-brown: #C18D52;
-  --dark-teal: #081B1B;
-  --forest-green: #203B37;
-  --sage-green: #5A8F76;
-  --mint-green: #96CDB0;
-  --border: rgba(150, 205, 176, 0.1);
+  --background: #0a0a0a;
+  --foreground: #e5e5e5;
+  --gold: #c9a961;
+  --gold-light: #d4af6f;
+  --gold-dark: #a8904f;
+  --black: #000000;
+  --dark-gray: #141414;
+  --medium-gray: #1a1a1a;
+  --light-gray: #242424;
+  --border: rgba(255, 255, 255, 0.06);
 }
 
 * {
@@ -37,28 +39,16 @@ body {
     text-wrap: balance;
   }
   
-  .text-cream {
-    color: var(--foreground);
+  .text-gold {
+    color: var(--gold);
   }
   
-  .text-brown {
-    color: var(--accent-brown);
+  .bg-dark {
+    background-color: var(--dark-gray);
   }
   
-  .text-sage {
-    color: var(--sage-green);
-  }
-  
-  .text-mint {
-    color: var(--mint-green);
-  }
-  
-  .bg-forest {
-    background-color: var(--forest-green);
-  }
-  
-  .bg-sage {
-    background-color: var(--sage-green);
+  .bg-medium {
+    background-color: var(--medium-gray);
   }
   
   .border-subtle {
@@ -77,57 +67,57 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(90, 143, 118, 0.3);
+  background: rgba(255, 255, 255, 0.1);
   border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(90, 143, 118, 0.5);
+  background: rgba(255, 255, 255, 0.15);
 }
 
 /* Minimal card effect */
 .card-minimal {
-  background: var(--forest-green);
+  background: var(--dark-gray);
   border: 1px solid var(--border);
   transition: all 0.2s ease;
 }
 
 .card-minimal:hover {
-  border-color: rgba(150, 205, 176, 0.2);
-  background: rgba(32, 59, 55, 0.8);
+  border-color: rgba(255, 255, 255, 0.1);
+  background: var(--medium-gray);
 }
 
 /* Subtle button */
 .btn-subtle {
-  background: rgba(90, 143, 118, 0.1);
-  color: var(--sage-green);
-  border: 1px solid rgba(90, 143, 118, 0.2);
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--foreground);
+  border: 1px solid var(--border);
   transition: all 0.2s ease;
   backdrop-filter: blur(10px);
 }
 
 .btn-subtle:hover {
-  background: rgba(90, 143, 118, 0.2);
-  border-color: rgba(90, 143, 118, 0.3);
-  color: var(--mint-green);
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.12);
+  transform: translateY(-1px);
 }
 
-.btn-brown {
-  background: rgba(193, 141, 82, 0.15);
-  color: var(--accent-brown);
-  border: 1px solid rgba(193, 141, 82, 0.25);
+.btn-gold-subtle {
+  background: rgba(201, 169, 97, 0.12);
+  color: var(--gold);
+  border: 1px solid rgba(201, 169, 97, 0.2);
   transition: all 0.2s ease;
 }
 
-.btn-brown:hover {
-  background: rgba(193, 141, 82, 0.25);
-  border-color: rgba(193, 141, 82, 0.35);
-  color: #D4A574;
+.btn-gold-subtle:hover {
+  background: rgba(201, 169, 97, 0.18);
+  border-color: rgba(201, 169, 97, 0.3);
+  color: var(--gold-light);
 }
 
 /* Glass effect - subtle */
 .glass-subtle {
-  background: rgba(32, 59, 55, 0.6);
+  background: rgba(20, 20, 20, 0.6);
   backdrop-filter: blur(20px);
   border: 1px solid var(--border);
 }
@@ -145,6 +135,6 @@ body {
 }
 
 *:focus-visible {
-  outline: 2px solid rgba(90, 143, 118, 0.4);
+  outline: 2px solid rgba(201, 169, 97, 0.3);
   outline-offset: 2px;
 }

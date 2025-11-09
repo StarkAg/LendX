@@ -152,7 +152,7 @@ export default function BorrowerDetail({ borrowerId }: BorrowerDetailProps) {
 
   if (!borrower || !summary) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-teal">
+      <div className="min-h-screen flex items-center justify-center bg-black">
         <div className="text-foreground/40">Loading...</div>
       </div>
     );
@@ -161,9 +161,9 @@ export default function BorrowerDetail({ borrowerId }: BorrowerDetailProps) {
   const filteredTransactions = filterTransactionsByDate(borrower.transactions);
 
   return (
-    <div className="min-h-screen bg-teal">
+    <div className="min-h-screen bg-black">
       {/* Header - Minimal */}
-      <header className="border-b border-border sticky top-0 z-50 backdrop-blur-xl bg-teal/80">
+      <header className="border-b border-border sticky top-0 z-50 backdrop-blur-xl bg-black/60">
         <div className="max-w-6xl mx-auto px-6 py-6">
           <div className="flex justify-between items-center">
             <div className="flex items-center gap-4">
@@ -203,17 +203,17 @@ export default function BorrowerDetail({ borrowerId }: BorrowerDetailProps) {
           </div>
           <div className="card-minimal rounded-xl p-5">
             <p className="text-xs text-foreground/50 mb-2 font-medium">Total Returned</p>
-            <p className="text-2xl font-light text-sage">{formatCurrency(summary.totalReturned)}</p>
+            <p className="text-2xl font-light text-foreground">{formatCurrency(summary.totalReturned)}</p>
           </div>
           <div className="card-minimal rounded-xl p-5">
             <p className="text-xs text-foreground/50 mb-2 font-medium">Current Balance</p>
-            <p className="text-2xl font-light text-mint">
+            <p className="text-2xl font-light text-gold">
               {formatCurrency(Math.abs(summary.currentBalance))}
             </p>
           </div>
           <div className="card-minimal rounded-xl p-5">
             <p className="text-xs text-foreground/50 mb-2 font-medium">Daily Interest Rate</p>
-            <p className="text-2xl font-light text-brown">
+            <p className="text-2xl font-light text-foreground/60">
               {summary.dailyInterestRate.toFixed(4)}%
             </p>
           </div>
@@ -228,7 +228,7 @@ export default function BorrowerDetail({ borrowerId }: BorrowerDetailProps) {
                 type="date"
                 value={startDate}
                 onChange={(e) => setStartDate(e.target.value)}
-                className="w-full px-3 py-2 bg-forest border border-border rounded-lg text-sm text-foreground"
+                className="w-full px-3 py-2 bg-dark border border-border rounded-lg text-sm text-foreground"
               />
             </div>
             <div>
@@ -237,7 +237,7 @@ export default function BorrowerDetail({ borrowerId }: BorrowerDetailProps) {
                 type="date"
                 value={endDate}
                 onChange={(e) => setEndDate(e.target.value)}
-                className="w-full px-3 py-2 bg-forest border border-border rounded-lg text-sm text-foreground"
+                className="w-full px-3 py-2 bg-dark border border-border rounded-lg text-sm text-foreground"
               />
             </div>
             <div>
@@ -248,7 +248,7 @@ export default function BorrowerDetail({ borrowerId }: BorrowerDetailProps) {
                 type="date"
                 value={asOfDate}
                 onChange={(e) => setAsOfDate(e.target.value)}
-                className="w-full px-3 py-2 bg-forest border border-border rounded-lg text-sm text-foreground"
+                className="w-full px-3 py-2 bg-dark border border-border rounded-lg text-sm text-foreground"
               />
             </div>
             <div className="flex items-end">
@@ -258,7 +258,7 @@ export default function BorrowerDetail({ borrowerId }: BorrowerDetailProps) {
                   setEndDate("");
                   setAsOfDate(new Date().toISOString().split("T")[0]);
                 }}
-                className="w-full px-4 py-2 bg-forest border border-border text-foreground/60 rounded-lg hover:bg-forest-light hover:text-foreground transition-colors text-sm"
+                className="w-full px-4 py-2 bg-dark border border-border text-foreground/60 rounded-lg hover:bg-medium hover:text-foreground transition-colors text-sm"
               >
                 Reset
               </button>
@@ -276,7 +276,7 @@ export default function BorrowerDetail({ borrowerId }: BorrowerDetailProps) {
           </div>
           <div className="overflow-x-auto">
             <table className="min-w-full divide-y divide-border">
-              <thead className="bg-forest/50">
+              <thead className="bg-dark/50">
                 <tr>
                   <th className="px-6 py-3 text-left text-xs font-medium text-foreground/50 uppercase tracking-wider">
                     Date
@@ -305,13 +305,13 @@ export default function BorrowerDetail({ borrowerId }: BorrowerDetailProps) {
                 ) : (
                   transactionsWithBalance.map((transaction) => {
                     return (
-                      <tr key={transaction.id} className="hover:bg-forest/30 transition-colors">
+                      <tr key={transaction.id} className="hover:bg-dark/30 transition-colors">
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-foreground/80">
                           {formatDate(transaction.date)}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm">
                           {transaction.type === "taken" ? (
-                            <span className="text-sage font-medium">
+                            <span className="text-foreground/90 font-medium">
                               {formatCurrency(transaction.amount)}
                             </span>
                           ) : (
@@ -320,14 +320,14 @@ export default function BorrowerDetail({ borrowerId }: BorrowerDetailProps) {
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm">
                           {transaction.type === "returned" ? (
-                            <span className="text-mint font-medium">
+                            <span className="text-foreground/90 font-medium">
                               {formatCurrency(transaction.amount)}
                             </span>
                           ) : (
                             <span className="text-foreground/20">-</span>
                           )}
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm font-light text-brown">
+                        <td className="px-6 py-4 whitespace-nowrap text-sm font-light text-gold">
                           {formatCurrency(Math.abs(transaction.runningBalance))}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-right text-sm">
@@ -359,7 +359,7 @@ export default function BorrowerDetail({ borrowerId }: BorrowerDetailProps) {
             onClick={async () => {
               await exportToExcel(borrower, filteredTransactions, summary);
             }}
-            className="px-4 py-2 bg-forest border border-border text-foreground/60 rounded-lg hover:bg-forest-light hover:text-foreground transition-colors text-sm"
+            className="px-4 py-2 bg-dark border border-border text-foreground/60 rounded-lg hover:bg-medium hover:text-foreground transition-colors text-sm"
           >
             Export to Excel
           </button>
@@ -367,7 +367,7 @@ export default function BorrowerDetail({ borrowerId }: BorrowerDetailProps) {
             onClick={async () => {
               await exportToPDF(borrower, filteredTransactions, summary);
             }}
-            className="px-4 py-2 bg-forest border border-border text-foreground/60 rounded-lg hover:bg-forest-light hover:text-foreground transition-colors text-sm"
+            className="px-4 py-2 bg-dark border border-border text-foreground/60 rounded-lg hover:bg-medium hover:text-foreground transition-colors text-sm"
           >
             Export to PDF
           </button>
@@ -420,7 +420,7 @@ function EditTransactionModal({
   };
 
   return (
-    <div className="fixed inset-0 bg-teal/80 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+    <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4 z-50">
       <div className="card-minimal rounded-2xl max-w-md w-full border-border">
         <div className="px-6 py-5 border-b border-border flex justify-between items-center">
           <h2 className="text-lg font-medium text-foreground">Edit Transaction</h2>
@@ -441,7 +441,7 @@ function EditTransactionModal({
                   value="taken"
                   checked={type === "taken"}
                   onChange={(e) => setType(e.target.value as "taken")}
-                  className="mr-2 w-4 h-4 text-sage focus:ring-sage bg-forest border-border"
+                  className="mr-2 w-4 h-4 text-gold focus:ring-gold bg-dark border-border"
                 />
                 <span className="text-sm text-foreground">Taken</span>
               </label>
@@ -451,7 +451,7 @@ function EditTransactionModal({
                   value="returned"
                   checked={type === "returned"}
                   onChange={(e) => setType(e.target.value as "returned")}
-                  className="mr-2 w-4 h-4 text-sage focus:ring-sage bg-forest border-border"
+                  className="mr-2 w-4 h-4 text-gold focus:ring-gold bg-dark border-border"
                 />
                 <span className="text-sm text-foreground">Returned</span>
               </label>
@@ -466,7 +466,7 @@ function EditTransactionModal({
               onChange={(e) => setAmount(e.target.value)}
               min="0"
               step="0.01"
-              className="w-full px-4 py-2.5 bg-forest border border-border rounded-lg focus:ring-1 focus:ring-sage/30 text-foreground text-sm"
+              className="w-full px-4 py-2.5 bg-dark border border-border rounded-lg focus:ring-1 focus:ring-gold/30 text-foreground text-sm"
               required
             />
           </div>
@@ -477,7 +477,7 @@ function EditTransactionModal({
               type="date"
               value={date}
               onChange={(e) => setDate(e.target.value)}
-              className="w-full px-4 py-2.5 bg-forest border border-border rounded-lg focus:ring-1 focus:ring-sage/30 text-foreground text-sm"
+              className="w-full px-4 py-2.5 bg-dark border border-border rounded-lg focus:ring-1 focus:ring-gold/30 text-foreground text-sm"
               required
             />
           </div>
@@ -486,13 +486,13 @@ function EditTransactionModal({
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 px-4 py-2.5 border border-border text-foreground/60 rounded-lg hover:bg-forest hover:text-foreground transition-colors text-sm"
+              className="flex-1 px-4 py-2.5 border border-border text-foreground/60 rounded-lg hover:bg-dark hover:text-foreground transition-colors text-sm"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="flex-1 btn-brown px-4 py-2.5 rounded-lg text-sm font-medium"
+              className="flex-1 btn-gold-subtle px-4 py-2.5 rounded-lg text-sm font-medium"
             >
               Save Changes
             </button>
